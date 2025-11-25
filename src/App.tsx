@@ -1,4 +1,4 @@
-import Layout from "./components/common/layout/Layout";
+import Layout from "./components/layout/Layout";
 import Detail from "./pages/Detail";
 import Home from "./pages/Home";
 import { GlobalStyle } from "./style/global";
