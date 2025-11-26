@@ -27,6 +27,7 @@ const FooterStyled = styled.footer`
     padding: 20px 0;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
     .logo {
         img {

@@ -1,38 +1,53 @@
 import { styled } from "styled-components";
 import logo from "../../assets/images/logo.png";
-import {FaSignInAlt, FaRegUser } from 'react-icons/fa';
+import {FaSignInAlt as _FaSignInAlt, FaRegUser as _FaRegUser } from 'react-icons/fa';
+import React, { useEffect, useState } from 'react';
+import { Link } from "react-router-dom";
+import {Category} from "../../models/category.model"
+import { fetchCategory } from "../../api/category.api";
+import { useCategory } from "../../hooks/useCategory";
 
-const CATEGORY = [
-    {
-        id: null,
-        name : "전체",
-    }, {
-        id: 0,
-        name : "동화",
-    }, {
-        id: 1,
-        name : "소설",
-    }, {
-        id: 2,
-        name : "사회",
-    }
-]
+// react-icons' bundled types return ReactNode which can include undefined and
+// causes TS2786 under strict JSX rules. Cast to a ComponentType so they are
+// valid JSX components here.
+const FaSignInAlt = _FaSignInAlt as unknown as React.ComponentType<React.SVGProps<SVGSVGElement>>;
+const FaRegUser = _FaRegUser as unknown as React.ComponentType<React.SVGProps<SVGSVGElement>>;
+
+// const CATEGORY = [
+//     {
+//         id: null,
+//         name : "전체",
+//     }, {
+//         id: 0,
+//         name : "동화",
+//     }, {
+//         id: 1,
+//         name : "소설",
+//     }, {
+//         id: 2,
+//         name : "사회",
+//     }
+// ]
 
 function Header() {
+     const { category } = useCategory();
+
     return (
         <HeaderStyle>
             <h1 className="logo">
-                <img src={logo} alt="book store" />
+                <Link to="/">
+                    <img src={logo} alt="book store" />
+                </Link>
             </h1>
             <nav className="category">
                 <ul>
                     {
-                        CATEGORY.map((item) => (
+                        category.map((item) => (
                             <li key={item.id}>
-                                <a href ={item.id === null ? ' books'
+                                <Link to ={item.id === null ? '/books'
                                      : `/books?category.id=${item.id}`}>
                                     {item.name}
-                                </a>
+                                </Link>
                             </li>
                         ))
                     }
