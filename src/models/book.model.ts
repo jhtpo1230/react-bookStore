@@ -8,14 +8,14 @@ export interface Book {
   summary: string;
   detail: string;
   author: string;
-  pages: number;
-  contents: string;
+  page_num: number;
+  content_list: string;
   price: number;
   likes: number;
-  pubDate: string;
+  published_date: string;
+  category_name: string;
 }
 
 export interface BookDetail extends Book {
-  categoryName : string;
-  liked : boolean;
+  liked: boolean;
 }

@@ -1,11 +1,12 @@
 import { styled } from "styled-components";
 import logo from "../../assets/images/logo.png";
-import {FaSignInAlt as _FaSignInAlt, FaRegUser as _FaRegUser } from 'react-icons/fa';
+import { FaSignInAlt as _FaSignInAlt, FaRegUser as _FaRegUser } from 'react-icons/fa';
 import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
-import {Category} from "../../models/category.model"
+import { Category } from "../../models/category.model"
 import { fetchCategory } from "../../api/category.api";
 import { useCategory } from "../../hooks/useCategory";
+import { useAuthStore } from "../../store/authStore";
 
 // react-icons' bundled types return ReactNode which can include undefined and
 // causes TS2786 under strict JSX rules. Cast to a ComponentType so they are
@@ -30,7 +31,8 @@ const FaRegUser = _FaRegUser as unknown as React.ComponentType<React.SVGProps<SV
 // ]
 
 function Header() {
-     const { category } = useCategory();
+    const { category } = useCategory();
+    const { isloggedIn, storeLogout } = useAuthStore();
 
     return (
         <HeaderStyle>
@@ -44,8 +46,8 @@ function Header() {
                     {
                         category.map((item) => (
                             <li key={item.id}>
-                                <Link to ={item.id === null ? '/books'
-                                     : `/books?category.id=${item.id}`}>
+                                <Link to={item.id === null ? '/books'
+                                    : `/books?category.id=${item.id}`}>
                                     {item.name}
                                 </Link>
                             </li>
@@ -53,80 +55,106 @@ function Header() {
                     }
                 </ul>
             </nav>
-            <nav className = 'auth'>
-                <ul>
-                    <li>
-                        <a href = "/login">
-                            <FaSignInAlt /> 로그인
-                        </a>
-                    </li>
-                    <li>
-                        <a href = "/login">
-                            <FaRegUser/> 회원가입
-                        </a>
-                    </li>
-                </ul>
-            </nav>    
+            <nav className='auth'>
+                {isloggedIn ? (
+                    <ul>
+                        <li>
+                            <Link to="/cart">
+                                <FaSignInAlt />
+                                장바구니
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/orderlist">
+                                <FaSignInAlt />
+                                주문내역
+                            </Link>
+                        </li>
+                        <li>
+                            <button onClick={storeLogout}>로그아웃</button>
+                        </li>
+                    </ul>
+                ) : (
+                    <ul>
+                        <li>
+                            <Link to="/login">
+                                <FaSignInAlt />
+                                로그인
+                            </Link>
+                        </li>
+                        <li>
+                            <Link to="/signup">
+                                <FaRegUser />
+                                회원가입
+                            </Link>
+                        </li>
+                    </ul>
+                )}
+            </nav>
         </HeaderStyle>
     )
 }
+
 const HeaderStyle = styled.header`
-    width: 100%;
-    margin : 0 auto;
-    max-width: ${({theme}) => theme.layout.width.large};
+  width: 100%;
+  margin: 0 auto;
+  max-width: ${({ theme }) => theme.layout.width.large};
 
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px 0;
-    border-bottom: 1px solid ${({theme}) => 
-        theme.color.background};
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+  border-bottom: 1px solid ${({ theme }) => theme.color.background};
 
-    .logo{
-        img {
-            width: 200px;
-        }
+  .logo {
+    img {
+      width: 200px;
     }
+  }
 
-    .category {
-        ul{
-            display: flex;
-            gap: 32px;
-            li {
-                a{
-                    font-size: 1.5rem;
-                    font-weight: 600;
-                    text-decoration: none;
-                    color: ${({theme}) => theme.color.text};
+  .category {
+    ul {
+      display: flex;
+      gap: 32px;
+      li {
+        a {
+          font-size: 1.5rem;
+          font-weight: 600;
+          text-decoration: none;
+          color: ${({ theme }) => theme.color.text};
 
-                    &:hover {
-                        color: ${({theme}) => theme.color.primary};
-                    }
-                }
-            }
+          &:hover {
+            color: ${({ theme }) => theme.color.primary};
+          }
         }
-    }   
-
-    .auth {
-        ul{
-            display: flex;
-            gap: 16px;
-            li{
-                a {
-                    font-size: 1rem;
-                    font-weight: 600;
-                    text-decoration: none;
-                    display : flex;
-                    align-items: center;
-                    line-height: 1;
-
-                    svg {
-                        margin-right : 6px;
-                    }
-                }
-            }
-        }
+      }
     }
+  }
+
+  .auth {
+    ul {
+      display: flex;
+      gap: 16px;
+      li {
+        a {
+        a,
+        button {
+          font-size: 1rem;
+          font-weight: 600;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          line-height: 1;
+          background: none;
+          border: 0;
+          cursor: pointer;
+          svg {
+            margin-right: 6px;
+          }
+        }
+      }
+    }
+  }
 `;
 
 export default Header;

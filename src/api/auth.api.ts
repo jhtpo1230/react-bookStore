@@ -1,17 +1,17 @@
-import { SignupProps } from "../pages/Signup";
+import { AuthProps } from "../pages/Signup";
 import { httpClient } from "./http";
 
-export const signup = async (userData: SignupProps) => {
-  const response = await httpClient.post("/users/join", userData);
+export const signup = async (userData: AuthProps) => {
+  const response = await httpClient.post("/users/signup", userData);
   return response.data;
 };
 
-export const resetRequest = async (data: SignupProps) => {
+export const resetRequest = async (data: AuthProps) => {
   const response = await httpClient.post("/users/reset", data);
   return response.data;
 };
 
-export const changePassword = async (userData: SignupProps) => {
+export const changePassword = async (userData: AuthProps) => {
   const response = await httpClient.put("/users/reset", userData);
   return response.data;
 };
