@@ -1,62 +1,18 @@
-import Layout from "./components/layout/Layout";
-import Home from "./pages/Home";
-import Error from "./components/common/Error";
 import { BookStoreThemeProvider } from "./context/themeContext";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Signup from "./pages/Signup";
-import ResetPassword from "./pages/ResetPassword";
-import Login from "./pages/Login";
-import Books from "./pages/Books";
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <Layout>
-        <Home />
-      </Layout>
-    ),
-    errorElement: <Error />,
-  },
-  {
-    path: "/books",
-    element: (
-      <Layout>
-        <Books />
-      </Layout>
-    ),
-  },
-  {
-    path: "/signup",
-    element: (
-      <Layout>
-        <Signup />
-      </Layout>
-    ),
-  },
-  {
-    path: "/reset",
-    element: (
-      <Layout>
-        <ResetPassword />
-      </Layout>
-    ),
-  },
-  {
-    path: "/login",
-    element: (
-      <Layout>
-        <Login />
-      </Layout>
-    ),
-  },
-]);
+import { RouterProvider } from "react-router-dom";
+import { QueryClientProvider } from "react-query";
+import { queryClient } from "./api/queryClient";
+import { router } from "./router";
+import ToastContainer from "./components/common/toast/ToastContainer";
 
 function App() {
   return (
-    <BookStoreThemeProvider>
-      <RouterProvider router={router} />
-    </BookStoreThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <BookStoreThemeProvider>
+        <RouterProvider router={router} />
+        <ToastContainer />
+      </BookStoreThemeProvider>
+    </QueryClientProvider>
   );
 }
 
